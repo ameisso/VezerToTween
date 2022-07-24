@@ -19,14 +19,23 @@ fs.readFile(filePath, 'utf8', (err, data) => {
         var trackNameObject = track.getElementsByTagName("name");
         var trackTypeObject = track.getElementsByTagName("type");
         var trackType = trackTypeObject[0].innerXML;
-        if (trackType == "OSCValue/float" || trackType == "MidiCCValue" || trackType == "MidiNotes" || trackType == "ArtNetValue" || trackType == "OSCValue/int" ) {
+        if (trackType == "OSCValue/float" || trackType == "MidiCCValue" || trackType == "MidiNotes" || trackType == "ArtNetValue" || trackType == "OSCValue/int") {
 
             var trackName = trackNameObject[0].innerXML;
+            trackName = trackName.replace(/\s/g, '');//remove spaces
+            trackName = trackName[0].toLowerCase() +trackName.substring(1);
+            var timelineName = trackName+"Timeline";
+            var variableName = trackName+"target";
             var outputFileName = trackName + ".h";
             var keyframes = track.getElementsByTagName("keyframes");
             var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
-            var tweenString = "//Tween Timeline generated automatically \nTween::Timeline timeline;       // create timeline\ntimeline.mode(Tween::Mode::REPEAT_TL);\ntimeline.start();\ntimeline.add(target)            // add sequence to timeline\n"
+            var tweenString = "//Tween Timeline generated automatically (https://github.com/ameisso/VezerToTween) \n";
+            tweenString += "Tween::Timeline "+timelineName+";\n"
+            tweenString += "int "+variableName+";\n\n"
+
+            tweenString += "inline void setup"+trackName[0].toUpperCase()+trackName.substring(1)+"()\n{\n"
+            tweenString += "    "+timelineName+".mode(Tween::Mode::REPEAT_TL);\n    "+timelineName+".start();\n         "+timelineName+".add("+variableName+")\n"
 
             keyframesArray.forEach((item) => {
                 var time = 0;
@@ -53,9 +62,11 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 // console.log("[" + timeSeconds + "] " + value + " " + type)
                 // console.log("-----")
                 // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-                tweenString += ".then" + tweenType + "(" + value + "," + timeMs + ",[]() {})\n";
+                tweenString += "        .then" + tweenType + "(" + value + "," + timeMs + ",[]() {})\n";
             });
-            fs.writeFile(outputFileName, "\n" + tweenString + ";", function (err) {
+
+
+            fs.writeFile(outputFileName, "\n" + tweenString + ";\n}", function (err) {
                 if (err) throw err;
             });
         }
