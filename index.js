@@ -85,7 +85,14 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 // console.log("[" + timeSeconds + "] " + value + " " + type)
                 // console.log("-----")
                 // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-                tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
+                if( type == "none")
+                {
+                    tweenString += "        .hold("+ deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
+                }
+                else
+                {
+                    tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
+                }
             });
 
 
@@ -101,8 +108,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
 function getTweenEasingName(vezerName) {
     if (vezerName == "none") {
-        //warning none should be an offet 
-        return "";
+        //warning none is suported separatly (with .hold()
+        return null;
     }
     else if (vezerName == "linear") {
         return "";
