@@ -17,7 +17,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     var isLooping = root.getElementsByTagName('loop')[0].innerXML;
 
 
-    var previousTime = 0; 
+    var previousTime = 0;
+    var isFirstKeyframe = true;
     tracks.forEach((track) => {
 
         var trackType = track.getElementsByTagName("type")[0].innerXML;
@@ -35,15 +36,13 @@ fs.readFile(filePath, 'utf8', (err, data) => {
             var tweenString = "//Tween Timeline generated automatically (https://github.com/ameisso/VezerToTween) \n";
             tweenString += "Tween::Timeline " + timelineName + ";\n"
 
-            if( trackType == "OSCValue/float")
-            {
+            if (trackType == "OSCValue/float") {
                 tweenString += "float " + variableName + ";\n\n"
             }
-            else
-            {
+            else {
                 tweenString += "int " + variableName + ";\n\n"
             }
-   
+
 
             tweenString += "inline void setup" + trackName[0].toUpperCase() + trackName.substring(1) + "()\n{\n"
 
@@ -79,19 +78,27 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 });
                 var timeSeconds = time / fps;
 
-                var deltaMs = Number(((timeSeconds-previousTime)*1000).toFixed(3));
+                var deltaMs = Number(((timeSeconds - previousTime) * 1000).toFixed(3));
 
                 previousTime = timeSeconds;
                 // console.log("[" + timeSeconds + "] " + value + " " + type)
                 // console.log("-----")
                 // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-                if( type == "none")
-                {
-                    tweenString += "        .hold("+ deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
+                if (isFirstKeyframe && time != 0) {
+                    isFirstKeyframe = false;
+                    if (time != 0) {
+                        tweenString += "        .init(" + value + ",[]() {})\n";
+                        tweenString += "        .offset(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                    }
                 }
-                else
-                {
-                    tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
+                else {
+                    isFirstKeyframe = false;
+                    if (type == "none") {
+                        tweenString += "        .hold(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                    }
+                    else {
+                        tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                    }
                 }
             });
 
