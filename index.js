@@ -31,7 +31,16 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
             var tweenString = "//Tween Timeline generated automatically (https://github.com/ameisso/VezerToTween) \n";
             tweenString += "Tween::Timeline " + timelineName + ";\n"
-            tweenString += "int " + variableName + ";\n\n"
+
+            if( trackType == "OSCValue/float")
+            {
+                tweenString += "float " + variableName + ";\n\n"
+            }
+            else
+            {
+                tweenString += "int " + variableName + ";\n\n"
+            }
+   
 
             tweenString += "inline void setup" + trackName[0].toUpperCase() + trackName.substring(1) + "()\n{\n"
 
