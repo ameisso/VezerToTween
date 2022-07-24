@@ -23,6 +23,7 @@ converts [VEZÉR](https://imimot.com/vezer/)  timelines into [Tween](https://git
 
 void setup() {
     setupTrack1();
+    track1Timeline.start();//to start the timeline;
 }
 
 void loop() {

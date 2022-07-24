@@ -3,6 +3,7 @@ console.log("\n---------------------\n this files loads a vezer composition and 
 var fs = require('fs');
 const xml = require("xml-parse");
 const filePath = 'Untitled.xml'
+const outputPath = "";
 fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
         console.error(err);
@@ -27,7 +28,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
             trackName = trackName[0].toLowerCase() + trackName.substring(1);
             var timelineName = trackName + "Timeline";
             var variableName = trackName + "Target";
-            var outputFileName = trackName + ".h";
+            var outputFileName = outputPath + trackName + ".h";
             var keyframes = track.getElementsByTagName("keyframes");
             var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 

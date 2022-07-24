@@ -1,3 +1,4 @@
 node_modules
 package-lock.json
 timeline.h
+.DS_Store
