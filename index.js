@@ -78,15 +78,14 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                     tweenType = getTweenEasingName(type);
                 });
                 var timeSeconds = time / fps;
-                var timeMs = Math.round(timeSeconds * 1000);
 
-                var deltaMs = timeMs-previousTime;
+                var deltaMs = Number(((timeSeconds-previousTime)*1000).toFixed(3));
 
-                previousTime = timeMs;
+                previousTime = timeSeconds;
                 // console.log("[" + timeSeconds + "] " + value + " " + type)
                 // console.log("-----")
                 // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-                tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {})\n";
+                tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {}) //"+Number((timeSeconds).toFixed(1))+"s\n";
             });
 
 
