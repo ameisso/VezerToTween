@@ -2,8 +2,8 @@ console.log("\n---------------------\n this files loads a vezer composition and 
 
 var fs = require('fs');
 const xml = require("xml-parse");
-
-fs.readFile('Untitled.xml', 'utf8', (err, data) => {
+const filePath = 'Untitled.xml'
+fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
         console.error(err);
         return;
