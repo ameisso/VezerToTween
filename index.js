@@ -17,43 +17,51 @@ fs.readFile('Untitled.xml', 'utf8', (err, data) => {
 
     tracks.forEach((track) => {
         var trackNameObject = track.getElementsByTagName("name");
-        var trackName = trackNameObject[0].innerXML;
-        var outputFileName = trackName + ".h";
-        var keyframes = track.getElementsByTagName("keyframes");
-        var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
+        var trackTypeObject = track.getElementsByTagName("type");
+        var trackType = trackTypeObject[0].innerXML;
+        if (trackType == "OSCValue/float" || trackType == "MidiCCValue" || trackType == "MidiNotes" || trackType == "ArtNetValue" || trackType == "OSCValue/int" ) {
 
-        var tweenString = "//Tween Timeline generated automatically \nTween::Timeline timeline;       // create timeline\ntimeline.mode(Tween::Mode::REPEAT_TL);\ntimeline.start();\ntimeline.add(target)            // add sequence to timeline\n"
-        // console.log(keyframesArray);
-        keyframesArray.forEach((item) => {
-            var time = 0;
-            var value = 0;
-            var type = '';
-            var tweenType = '';
-            timePoints = item.getElementsByTagName("time");
-            timePoints.forEach((timepoint) => {
-                time = timepoint.innerXML;
-            });
-            valuePoints = item.getElementsByTagName("value");
-            valuePoints.forEach((valuePoint) => {
-                value = valuePoint.innerXML;
-            });
+            var trackName = trackNameObject[0].innerXML;
+            var outputFileName = trackName + ".h";
+            var keyframes = track.getElementsByTagName("keyframes");
+            var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
-            curveTypes = item.getElementsByTagName("interpolation");
-            curveTypes.forEach((curveType) => {
+            var tweenString = "//Tween Timeline generated automatically \nTween::Timeline timeline;       // create timeline\ntimeline.mode(Tween::Mode::REPEAT_TL);\ntimeline.start();\ntimeline.add(target)            // add sequence to timeline\n"
 
-                type = curveType.innerXML
-                tweenType = getTweenEasingName(type);
+            keyframesArray.forEach((item) => {
+                var time = 0;
+                var value = 0;
+                var type = '';
+                var tweenType = '';
+                timePoints = item.getElementsByTagName("time");
+                timePoints.forEach((timepoint) => {
+                    time = timepoint.innerXML;
+                });
+                valuePoints = item.getElementsByTagName("value");
+                valuePoints.forEach((valuePoint) => {
+                    value = valuePoint.innerXML;
+                });
+
+                curveTypes = item.getElementsByTagName("interpolation");
+                curveTypes.forEach((curveType) => {
+
+                    type = curveType.innerXML
+                    tweenType = getTweenEasingName(type);
+                });
+                var timeSeconds = time / fps;
+                var timeMs = Math.round(timeSeconds * 1000);
+                // console.log("[" + timeSeconds + "] " + value + " " + type)
+                // console.log("-----")
+                // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
+                tweenString += ".then" + tweenType + "(" + value + "," + timeMs + ",[]() {})\n";
             });
-            var timeSeconds = time / fps;
-            var timeMs = Math.round(timeSeconds * 1000);
-            // console.log("[" + timeSeconds + "] " + value + " " + type)
-            // console.log("-----")
-            // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-            tweenString += ".then" + tweenType + "(" + value + "," + timeMs + ",[]() {})\n";
-        });
-        fs.writeFile(outputFileName, "\n" + tweenString + ";", function (err) {
-            if (err) throw err;
-        });
+            fs.writeFile(outputFileName, "\n" + tweenString + ";", function (err) {
+                if (err) throw err;
+            });
+        }
+        else {
+            console.log("unsuported track type " + trackType);
+        }
     });
 });
 
