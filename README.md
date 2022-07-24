@@ -33,8 +33,11 @@ void loop() {
 
 
 ## TODO : 
-- support colors for neopixels 
-- remap function (for exemple one led can be testd via DMX (0-255) and controled by a 12bit pwm (0-4096))
 - support no interpolation points (should be .hold(duration))
 - support multiple compositions 
-- generate float target value if necessary (OSC float case) 
+- support colors for neopixels 
+- remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
+
+
+## License
+MIT
