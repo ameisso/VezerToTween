@@ -11,31 +11,40 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     var parsedXML = xml.parse(data);
     var xmlDoc = new xml.DOM(parsedXML);
     var root = xmlDoc.document;
-    var tracks = root.getElementsByTagName('track')
-    var fpsObject = root.getElementsByTagName('fps');
-    var fps = fpsObject[0].innerXML;
+    var tracks = root.getElementsByTagName('track');
+    var fps = root.getElementsByTagName('fps')[0].innerXML;
+    var isLooping = root.getElementsByTagName('loop')[0].innerXML;
 
     tracks.forEach((track) => {
-        var trackNameObject = track.getElementsByTagName("name");
-        var trackTypeObject = track.getElementsByTagName("type");
-        var trackType = trackTypeObject[0].innerXML;
+
+        var trackType = track.getElementsByTagName("type")[0].innerXML;
         if (trackType == "OSCValue/float" || trackType == "MidiCCValue" || trackType == "MidiNotes" || trackType == "ArtNetValue" || trackType == "OSCValue/int") {
 
-            var trackName = trackNameObject[0].innerXML;
+            var trackName = track.getElementsByTagName("name")[0].innerXML;
             trackName = trackName.replace(/\s/g, '');//remove spaces
-            trackName = trackName[0].toLowerCase() +trackName.substring(1);
-            var timelineName = trackName+"Timeline";
-            var variableName = trackName+"target";
+            trackName = trackName[0].toLowerCase() + trackName.substring(1);
+            var timelineName = trackName + "Timeline";
+            var variableName = trackName + "target";
             var outputFileName = trackName + ".h";
             var keyframes = track.getElementsByTagName("keyframes");
             var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
             var tweenString = "//Tween Timeline generated automatically (https://github.com/ameisso/VezerToTween) \n";
-            tweenString += "Tween::Timeline "+timelineName+";\n"
-            tweenString += "int "+variableName+";\n\n"
+            tweenString += "Tween::Timeline " + timelineName + ";\n"
+            tweenString += "int " + variableName + ";\n\n"
 
-            tweenString += "inline void setup"+trackName[0].toUpperCase()+trackName.substring(1)+"()\n{\n"
-            tweenString += "    "+timelineName+".mode(Tween::Mode::REPEAT_TL);\n    "+timelineName+".start();\n         "+timelineName+".add("+variableName+")\n"
+            tweenString += "inline void setup" + trackName[0].toUpperCase() + trackName.substring(1) + "()\n{\n"
+
+            tweenString += "    " + timelineName;
+            console.log('isLooping ' + isLooping)
+            if (isLooping == 'on') {
+                tweenString += ".mode(Tween::Mode::REPEAT_TL);"
+            }
+            else {
+                tweenString += ".mode(Tween::Mode::ONCE);"
+            }
+
+            tweenString += "\n    " + timelineName + ".start();\n         " + timelineName + ".add(" + variableName + ")\n"
 
             keyframesArray.forEach((item) => {
                 var time = 0;
