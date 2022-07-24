@@ -16,14 +16,20 @@ fs.readFile('Untitled.xml', 'utf8', (err, data) => {
     var tracks = root.getElementsByTagName('track')
     var fpsObject = root.getElementsByTagName('fps');
     var fps = fpsObject[0].innerXML;
+
+
+
+    var trackNameObject = tracks[0].getElementsByTagName("name");
+    var trackName = trackNameObject[0].innerXML;
+    console.log("Name :"+trackName);
+    outputFileName = trackName +".h";
     var keyframes = tracks[0].getElementsByTagName("keyframes");
     var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
-    fs.truncate(outputFileName, 0, function () { console.log('done') })
+    fs.truncate(outputFileName, 0, function () {})
     fs.writeFile(outputFileName, '//Tween Timeline generated automatically', function (err) {
         if (err) throw err;
     });
-
 
     //INIT TIMELINE 
     fs.appendFile(outputFileName, "\nTween::Timeline timeline;       // create timeline\ntimeline.mode(Tween::Mode::REPEAT_TL);\ntimeline.start();\ntimeline.add(target)            // add sequence to timeline"
