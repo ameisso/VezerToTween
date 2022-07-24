@@ -38,6 +38,5 @@ void loop() {
 - support colors for neopixels 
 - remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
 
-
 ## License
 MIT

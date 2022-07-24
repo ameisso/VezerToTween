@@ -47,7 +47,6 @@ fs.readFile(filePath, 'utf8', (err, data) => {
             tweenString += "inline void setup" + trackName[0].toUpperCase() + trackName.substring(1) + "()\n{\n"
 
             tweenString += "    " + timelineName;
-            console.log('isLooping ' + isLooping)
             if (isLooping == 'on') {
                 tweenString += ".mode(Tween::Mode::REPEAT_TL);"
             }
@@ -55,7 +54,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 tweenString += ".mode(Tween::Mode::ONCE);"
             }
 
-            tweenString += "\n    " + timelineName + ".start();\n         " + timelineName + ".add(" + variableName + ")\n"
+            tweenString += "\n    //" + timelineName + ".start();\n    " + timelineName + ".add(" + variableName + ")\n"
 
             keyframesArray.forEach((item) => {
                 var time = 0;
