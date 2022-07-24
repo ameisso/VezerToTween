@@ -15,6 +15,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     var fps = root.getElementsByTagName('fps')[0].innerXML;
     var isLooping = root.getElementsByTagName('loop')[0].innerXML;
 
+
+    var previousTime = 0; 
     tracks.forEach((track) => {
 
         var trackType = track.getElementsByTagName("type")[0].innerXML;
@@ -77,10 +79,14 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 });
                 var timeSeconds = time / fps;
                 var timeMs = Math.round(timeSeconds * 1000);
+
+                var deltaMs = timeMs-previousTime;
+
+                previousTime = timeMs;
                 // console.log("[" + timeSeconds + "] " + value + " " + type)
                 // console.log("-----")
                 // tweenString += ".then<Ease::Sine>(" + value + "," + timeMs + ",[]() {})\n";
-                tweenString += "        .then" + tweenType + "(" + value + "," + timeMs + ",[]() {})\n";
+                tweenString += "        .then" + tweenType + "(" + value + "," + deltaMs + ",[]() {})\n";
             });
 
 
