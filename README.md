@@ -28,14 +28,12 @@ void setup() {
 
 void loop() {
     track1Timeline.update();
-    Serial.println(track1target); // track1Target is defined in track1.h
+    Serial.println(track1Target); // track1Target is defined in track1.h
 }
 ```
 
 
 ## TODO : 
-- support no interpolation points (should be .hold(duration))
-- support multiple compositions 
 - support colors for neopixels 
 - remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
 
