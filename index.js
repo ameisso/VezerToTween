@@ -75,10 +75,10 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
                     type = curveType.innerXML
                     tweenType = getTweenEasingName(type);
-                });
+                }); 
        
                 var timeSeconds = time / fps;
-                var deltaMs = Number(((timeSeconds - previousTime) * 1000).toFixed(3));
+                var deltaMs = Number(((timeSeconds - previousTime) * 1000).toFixed(0));
                 if (deltaMs < 0) {
     
                     deltaMs = 0;
