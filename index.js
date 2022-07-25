@@ -90,8 +90,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
                 if (isFirstKeyframe && time != 0) {
                     isFirstKeyframe = false;
                     if (time != 0) {
-                        tweenString += "        .init(" + value + ",[]() {})\n";
-                        tweenString += "        .offset(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        tweenString += "        .init(" + value + ")\n";
+                        tweenString += "        .offset(" + deltaMs + ") //" + Number((timeSeconds).toFixed(1)) + "s\n";
                     }
                 }
                 else {
