@@ -32,10 +32,21 @@ void loop() {
 }
 ```
 
+## Limitations :
+The number of points depends on the memeory available on your controler : 
+- Arduino Uno : ~15 points 
+- SAMD21 : ~250 points  
+
 
 ## TODO : 
+- code refactoring (function to access xml propoerties,)
+- export cues with times and offset as comments 
+- tweenduino support (and lib modification to support int)
+- support multiple compositions 
 - support colors for neopixels 
 - remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
+- electron app / online site 
+
 
 ## License
 MIT
