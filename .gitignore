@@ -2,3 +2,6 @@ node_modules
 package-lock.json
 timeline.h
 .DS_Store
+example/.vscode/extensions.json
+example/include/README
+example/test/README

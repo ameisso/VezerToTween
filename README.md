@@ -42,6 +42,8 @@ The number of points depends on the memeory available on your controler :
 - code refactoring (function to access xml propoerties,)
 - export cues with times and offset as comments 
 - tweenduino support (and lib modification to support int)
+- only exports activated timelines compositions 
+- option to export all tracks from the same composition in a single file ? 
 - support multiple compositions 
 - support colors for neopixels 
 - remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
