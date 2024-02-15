@@ -229,6 +229,115 @@ fs.readFile(filePath, 'utf8', (err, data) => {
         }
         else if (trackType == "ArtNetColor/RGB") {
 
+            var trackName = track.getElementsByTagName("name")[0].innerXML;
+            trackName = trackName.replace(/\s/g, '');//remove spaces
+            trackName = trackName[0].toLowerCase() + trackName.substring(1);
+            var timelineNameR = trackName + "Timeline_R";
+            var timelineNameG = trackName + "Timeline_G";
+            var timelineNameB = trackName + "Timeline_B";
+            var variableNameR = trackName + "TargetR";
+            var variableNameG = trackName + "TargetG";
+            var variableNameB = trackName + "TargetB";
+            var outputFileName = outputPath + trackName + ".h";
+
+            var tweenString = "//Tween Timeline generated automatically (https://github.com/ameisso/VezerToTween) \n\n";
+            tweenString += "Tween::Timeline " + timelineNameR + ";\n";
+            tweenString += "Tween::Timeline " + timelineNameG + ";\n";
+            tweenString += "Tween::Timeline " + timelineNameB + ";\n";
+
+            tweenString += "\nint " + variableNameR + ";\n"
+            tweenString += "int " + variableNameG + ";\n"
+            tweenString += "int " + variableNameB + ";\n"
+
+
+            tweenString += "\n\ninline void setup" + trackName[0].toUpperCase() + trackName.substring(1) + "()\n{\n"
+            var redString = "    " + timelineNameR;
+            var greenString = "    " + timelineNameG;
+            var blueString = "    " + timelineNameB;
+            if (isLooping == 'on') {
+                redString += ".mode(Tween::Mode::REPEAT_TL);"
+                greenString += ".mode(Tween::Mode::REPEAT_TL);"
+                blueString += ".mode(Tween::Mode::REPEAT_TL);"
+            }
+            else {
+                redString += ".mode(Tween::Mode::ONCE);"
+                greenString += ".mode(Tween::Mode::ONCE);"
+                blueString += ".mode(Tween::Mode::ONCE);"
+            }
+
+            var keyframes = track.getElementsByTagName("keyframes");
+            var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
+
+            redString += "\n    //" + timelineNameR + ".start();\n    " + timelineNameR + ".add(" + variableNameR + ")\n"
+            greenString += "\n    //" + timelineNameG + ".start();\n    " + timelineNameG + ".add(" + variableNameG + ")\n"
+            blueString += "\n    //" + timelineNameB + ".start();\n    " + timelineNameB + ".add(" + variableNameB + ")\n"
+
+            isFirstKeyframe = true;
+            keyframesArray.forEach((item) => {
+                var time = 0;
+                var value = 0;
+                var type = '';
+                var tweenType = '';
+                timePoints = item.getElementsByTagName("time");
+                timePoints.forEach((timepoint) => {
+                    time = timepoint.innerXML;
+                });
+                valuePoints = item.getElementsByTagName("value");
+                valuePoints.forEach((valuePoint) => {
+                    value = valuePoint.innerXML;
+                });
+
+                curveTypes = item.getElementsByTagName("interpolation");
+                curveTypes.forEach((curveType) => {
+
+                    type = curveType.innerXML
+                    tweenType = getTweenEasingName(type);
+                });
+
+                var timeSeconds = time / fps;
+                var deltaMs = Number(((timeSeconds - previousTime) * 1000).toFixed(0));
+                if (deltaMs < 0) {
+
+                    deltaMs = 0;
+                }
+                previousTime = timeSeconds;
+                if (isFirstKeyframe && time != 0) {
+                    isFirstKeyframe = false;
+                    if (time != 0) {
+                        const splitted  = value.split(",");
+                        redString += "        .init(" + splitted.at(0) + ")\n";
+                        redString += "        .offset(" + deltaMs + ") //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        greenString += "        .init(" + splitted.at(1) + ")\n";
+                        greenString += "        .offset(" + deltaMs + ") //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        blueString += "        .init(" + splitted.at(2) + ")\n";
+                        blueString += "        .offset(" + deltaMs + ") //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                    }
+                }
+                else { 
+                    isFirstKeyframe = false;
+                    if (type == "none") {
+                        redString += "        .hold(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        greenString += "        .hold(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        blueString += "        .hold(" + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                    }
+                    else {
+
+                        const splitted = value.split(",");
+                        redString += "        .then" + tweenType + "(" + splitted.at(0) + "," + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        greenString += "        .then" + tweenType + "(" + splitted.at(1) + "," + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+                        blueString += "        .then" + tweenType + "(" + splitted.at(2) + "," + deltaMs + ",[]() {}) //" + Number((timeSeconds).toFixed(1)) + "s\n";
+
+                    }
+                }
+            });
+
+            redString += ";\n";
+            greenString += ";\n";
+            blueString += ";\n";
+
+            fs.writeFile(outputFileName, "\n" + tweenString + "\n" + redString + greenString + blueString  + "\n}", function (err) {
+                if (err) throw err;
+            });
         }
         else {
             console.log("unsuported track type " + trackType);
