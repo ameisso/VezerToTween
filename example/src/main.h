@@ -1,9 +1,8 @@
 #include <Arduino.h>
-#include <LXSAMD21DMX.h>
 #include <Tween.h>
 // include converted timelines : 
-#include "warm.h"
-#include "cold.h"
+#include "color.h"
+
 
 #define LED 13
 #define RELAY_PIN 6
