@@ -40,13 +40,14 @@ The number of points depends on the memory available on your controler :
 
 
 ## TODO : 
-- only exports activated timelines compositions 
-- option to export all tracks from the same composition in a single file ? 
 - code refactoring (function to access xml propoerties,)
+- only exports activated timelines compositions 
+- remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
+- option to export all tracks from the same composition in a single file ? 
+- support multiple compositions 
 - export cues with times and offset as comments 
 - tweenduino support (and lib modification to support int)
-- support multiple compositions 
-- remap function (for exemple one led can be tested via DMX (0-255) and controled by a 12bit pwm (0-4096))
 - electron app / online site 
+- option to start automatically the timeline 
 ## License
 MIT
