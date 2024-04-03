@@ -151,10 +151,10 @@ fs.readFile(filePath, 'utf8', (err, data) => {
             var keyframes = track.getElementsByTagName("keyframes");
             var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
-            redString += "\n    //" + timelineNameR + ".start();\n    " + timelineNameR + ".add(" + variableNameR + ")\n"
-            greenString += "\n    //" + timelineNameG + ".start();\n    " + timelineNameG + ".add(" + variableNameG + ")\n"
-            blueString += "\n    //" + timelineNameB + ".start();\n    " + timelineNameB + ".add(" + variableNameB + ")\n"
-            whiteString += "\n    //" + timelineNameW + ".start();\n    " + timelineNameW + ".add(" + variableNameW + ")\n"
+            redString += "\n    " + timelineNameR + ".start();\n    " + timelineNameR + ".add(" + variableNameR + ")\n"
+            greenString += "\n    " + timelineNameG + ".start();\n    " + timelineNameG + ".add(" + variableNameG + ")\n"
+            blueString += "\n    " + timelineNameB + ".start();\n    " + timelineNameB + ".add(" + variableNameB + ")\n"
+            whiteString += "\n    " + timelineNameW + ".start();\n    " + timelineNameW + ".add(" + variableNameW + ")\n"
 
             isFirstKeyframe = true;
             keyframesArray.forEach((item) => {
@@ -268,9 +268,9 @@ fs.readFile(filePath, 'utf8', (err, data) => {
             var keyframes = track.getElementsByTagName("keyframes");
             var keyframesArray = keyframes[0].getElementsByTagName("keyframe");
 
-            redString += "\n    //" + timelineNameR + ".start();\n    " + timelineNameR + ".add(" + variableNameR + ")\n"
-            greenString += "\n    //" + timelineNameG + ".start();\n    " + timelineNameG + ".add(" + variableNameG + ")\n"
-            blueString += "\n    //" + timelineNameB + ".start();\n    " + timelineNameB + ".add(" + variableNameB + ")\n"
+            redString += "\n    " + timelineNameR + ".start();\n    " + timelineNameR + ".add(" + variableNameR + ")\n"
+            greenString += "\n    " + timelineNameG + ".start();\n    " + timelineNameG + ".add(" + variableNameG + ")\n"
+            blueString += "\n    " + timelineNameB + ".start();\n    " + timelineNameB + ".add(" + variableNameB + ")\n"
 
             isFirstKeyframe = true;
             keyframesArray.forEach((item) => {
